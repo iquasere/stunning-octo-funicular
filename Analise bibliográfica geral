@@ -1,0 +1,18 @@
+#Parte 1
+#Analise bibliográfica geral
+
+from Bio import Entrez
+from Bio import Medline
+
+handle=Entrez.esearch(db='pubmed',term='Treponema pallidum subsp. pallidum str. Nichols',retmax=20)
+record=Entrez.read(handle)
+idlist=record['IdList']
+print(idlist)
+Handle=Entrez.efetch(db='pubmed',id=idlist, rettype='medline',retmode='text')
+records=Medline.parse(Handle)
+records=list(records)
+
+for record in records:
+  print('title:'record.get('TI'))
+  print('authors:',record.get('AU'))
+  print('source:',record.get('SO')

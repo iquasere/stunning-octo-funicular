@@ -18,3 +18,9 @@ for record in records:
     print('authors:',record.get('AU','?'))
     print('source:',record.get('SO','?'))
     print('')
+
+#Retrieving fasta
+handler = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291")
+seq_record = SeqIO.read(handler, "fasta") #using "gb" as an alias for "genbank"
+handler.close()
+print("%s with %i features" % (seq_record.id, len(seq_record.features)))

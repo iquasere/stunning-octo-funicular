@@ -4,6 +4,7 @@
 from Bio import Entrez
 from Bio import Medline
 
+Entrez.email = 'ni.azevedo.s@gmail.com'
 handle=Entrez.esearch(db='pubmed',term='Treponema pallidum subsp. pallidum str. Nichols',retmax=20)
 record=Entrez.read(handle)
 idlist=record['IdList']

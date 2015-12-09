@@ -5,7 +5,7 @@ from Bio import Entrez
 from Bio import Medline
 
 Entrez.email = 'ni.azevedo.s@gmail.com'
-handle=Entrez.esearch(db='pubmed',term='Treponema pallidum subsp. pallidum str. Nichols',retmax=20)
+handle=Entrez.esearch(db='pubmed',term='Treponema pallidum pallidum Nichols',retmax=20)
 record=Entrez.read(handle)
 idlist=record['IdList']
 print(idlist)
@@ -14,6 +14,7 @@ records=Medline.parse(Handle)
 records=list(records)
 
 for record in records:
-  print('title:'record.get('TI'))
-  print('authors:',record.get('AU'))
-  print('source:',record.get('SO')
+    print('title:',record.get('TI','?'))
+    print('authors:',record.get('AU','?'))
+    print('source:',record.get('SO','?'))
+    print('')

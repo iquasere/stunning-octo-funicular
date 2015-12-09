@@ -19,8 +19,12 @@ for record in records:
     print('source:',record.get('SO','?'))
     print('')
 
-#Retrieving fasta
-handler = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291")
-seq_record = SeqIO.read(handler, "fasta") #using "gb" as an alias for "genbank"
-handler.close()
-print("%s with %i features" % (seq_record.id, len(seq_record.features)))
+#Retrieving fasta, group 5
+groupseq=open('group5.fasta','w')
+Handle=Entrez.efetch(db='nucleotide',id='15638995', rettype='fasta',retmode='text')
+seq_record = SeqIO.read(Handle, "fasta")
+Handle.close()
+seq=str(seq_record[501800:639849])
+groupseq.write(seq)
+groupseq.close()
+

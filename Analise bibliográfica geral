@@ -27,3 +27,19 @@ seq=str(seq_record[501800:639849])
 groupseq.write(seq)
 groupseq.close()
 
+#Fetching GenBank
+handler = Entrez.efetch(db="nucleotide", rettype="gbwithparts", retmode="text", id="NC_000919")
+seq_record = SeqIO.read(handler, "gb") #using "gb" as an alias for "genbank"
+handler.close()
+print(seq_record)
+print("%s with %i features" % (seq_record.id, len(seq_record.features)))
+
+
+features = list()
+
+for ft in seq_record.features:
+    for i in range(2345,2951, 5):
+        if re.match('TP_RS'+str(i),ft.qualifiers['locus_tag'][0]) != None:
+            features.append(ft)
+
+print(features)   

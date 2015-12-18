@@ -43,3 +43,21 @@ for ft in seq_record.features:
             features.append(ft)
 
 print(features)   
+
+
+#TRABALHO DE TABULAR: OBJETIVO -> CONFIRMAR ESSE REGISTO DE PROTEÍNAS COM ANOTAÇÃO DE GENBANK
+
+#Saves tabular register
+def readtabular(filename):
+    handler = open(filename) #Opens tabular file
+    tabular = list() #Where tabular register is saved
+    titles = handler.readline().lstrip('#').rstrip('\n').split('\t') #headlines
+    for line in handler.readlines():
+        objects = line.rstrip('\n').split('\t')
+        for j in range(2345,2951,5):
+            if str(j) in objects[7]: #searches for the right locus_tag
+                register = dict() #Saves each register as a dictionary
+                for k in range(len(objects)):
+                    register[titles[k]] = objects[k]
+                tabular.append(register)
+    return tabular

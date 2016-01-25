@@ -1,0 +1,63 @@
+#Parte 1
+#Analise bibliográfica geral
+
+from Bio import Entrez,Medline,SeqIO
+
+Entrez.email = 'ni.azevedo.s@gmail.com'
+handle=Entrez.esearch(db='pubmed',term='Treponema pallidum pallidum Nichols',retmax=20)
+record=Entrez.read(handle)
+idlist=record['IdList']
+print(idlist)
+Handle=Entrez.efetch(db='pubmed',id=idlist, rettype='medline',retmode='text')
+records=Medline.parse(Handle)
+records=list(records)
+
+for record in records:
+    print('title:',record.get('TI','?'))
+    print('authors:',record.get('AU','?'))
+    print('source:',record.get('SO','?'))
+    print('')
+
+#Retrieving fasta, group 5
+groupseq=open('group5.fasta','w')
+Handle=Entrez.efetch(db='nucleotide',id='15638995', rettype='fasta',retmode='text')
+seq_record = SeqIO.read(Handle, "fasta")
+Handle.close()
+seq=str(seq_record[501800:639849])
+groupseq.write(seq)
+groupseq.close()
+
+#Fetching GenBank
+handler = Entrez.efetch(db="nucleotide", rettype="gbwithparts", retmode="text", id="NC_000919")
+seq_record = SeqIO.read(handler, "gb") #using "gb" as an alias for "genbank"
+handler.close()
+print(seq_record)
+print("%s with %i features" % (seq_record.id, len(seq_record.features)))
+
+
+features = list()
+
+for ft in seq_record.features:
+    for i in range(2345,2951, 5):
+        if re.match('TP_RS'+str(i),ft.qualifiers['locus_tag'][0]) != None:
+            features.append(ft)
+
+print(features)   
+
+
+#TRABALHO DE TABULAR: OBJETIVO -> CONFIRMAR ESSE REGISTO DE PROTEÍNAS COM ANOTAÇÃO DE GENBANK
+
+#Saves tabular register
+def readtabular(filename):
+    handler = open(filename) #Opens tabular file
+    tabular = list() #Where tabular register is saved
+    titles = handler.readline().lstrip('#').rstrip('\n').split('\t') #headlines
+    for line in handler.readlines():
+        objects = line.rstrip('\n').split('\t')
+        for j in range(2345,2951,5):
+            if str(j) in objects[7]: #searches for the right locus_tag
+                register = dict() #Saves each register as a dictionary
+                for k in range(len(objects)):
+                    register[titles[k]] = objects[k]
+                tabular.append(register)
+    return tabular

@@ -33,7 +33,7 @@ def pdb():
                     pdb_id = line.split()[0]
                     for ref in ss.cross_references:
                         if ref[0] == 'RefSeq':
-                            pdb_ids.append((ref[1],pdb_id))
+                            pdb_ids.append((access,pdb_id))
     f.close()
     return pdb_ids
 

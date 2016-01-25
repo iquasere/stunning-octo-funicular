@@ -1,5 +1,5 @@
 #Saves swissprot register  
-def select_swissprot_entries(gb_fs,ficheiro):
+def select_swissprot_entries(gb_fs,ficheiro):                               #file is table retrieved from uniprot
     handle = open(ficheiro)
     swiss_record = [record for record in SwissProt.parse(handle)]
     entries = list()
@@ -14,7 +14,7 @@ def select_swissprot_entries(gb_fs,ficheiro):
     return entries
     
 #Selects reviewed entries
-def swissprot_reviewed(sp_entries):
+def swissprot_reviewed(sp_entries):                                         #sp_entries is result from previous function
     r_entries = list()
     for entry in sp_entries:
         if entry.data_class == 'Reviewed':

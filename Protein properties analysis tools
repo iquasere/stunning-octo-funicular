@@ -1,0 +1,22 @@
+#Saves swissprot register  
+def select_swissprot_entries(gb_fs,ficheiro):
+    handle = open(ficheiro)
+    swiss_record = [record for record in SwissProt.parse(handle)]
+    entries = list()
+    for ft in gb_fs:
+        if ft.type == 'CDS':
+            for entry in swiss_record:
+                for ref in entry.cross_references:
+                    if ref[0] == 'RefSeq':
+                        if 'protein_id' in ft.qualifiers.keys():
+                            if ref[1] == ft.qualifiers['protein_id'][0]:
+                                entries.append(entry)
+    return entries
+    
+#Selects reviewed entries
+def swissprot_reviewed(sp_entries):
+    r_entries = list()
+    for entry in sp_entries:
+        if entry.data_class == 'Reviewed':
+            r_entries.append(entry)
+    return r_entries

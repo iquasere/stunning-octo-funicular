@@ -20,3 +20,25 @@ def swissprot_reviewed(sp_entries):
         if entry.data_class == 'Reviewed':
             r_entries.append(entry)
     return r_entries
+    
+#Search in pdb database entries corresponding to study's proteins
+def pdb():
+    pdb_ids = list()
+    f = open('pdb_database.txt')
+    file = f.readlines()
+    for ss in sse:
+        for access in ss.accessions:
+            for line in file:
+                if access in line:
+                    pdb_id = line.split()[0]
+                    for ref in ss.cross_references:
+                        if ref[0] == 'RefSeq':
+                            pdb_ids.append((ref[1],pdb_id))
+    f.close()
+    return pdb_ids
+
+#Retrieve information from pdb
+def create_pdb_files():
+    pdbl = PDB.PDBList()
+    for match in pdb():
+        pdbl.retrieve_pdb_file(match)

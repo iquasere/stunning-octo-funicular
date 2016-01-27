@@ -69,6 +69,12 @@ def main():
     separar_n_int()
     fasta_files()
     blast()
+    create_muscle()
+    readmulti_seq_id_dbxrefs()
+    muscle2phy()
+    create_phy()
+    tree()
+    export()
 
 if __name__ == '__main__':
     main()

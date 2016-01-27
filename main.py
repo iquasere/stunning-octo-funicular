@@ -1,3 +1,8 @@
+from Bio import Entrez, Medline, SeqIO, GenBank, ExPASy, SwissProt, PDB
+from Bio.Blast import NCBIXML
+from Bio.KEGG import REST
+import re
+
 from bibiographic_analysis import *
 from sequence_features_analysis import *
 from proteins_table import *

@@ -35,13 +35,13 @@ def proteinas_interesse():
                         
 def poss():
     '''função que cria o fasta para se fazer o blast'''
-    interesse=proteinas_interesse()
+    interesting_list=proteinas_interesse()
     lista=select_features()
     j=1
     for ft in lista:
         qual=ft.qualifiers
         if 'protein_id' in qual.keys():                        
-            if qual['protein_id'][0] in interesse:
+            if qual['protein_id'][0] in interesting_list:
             #ver se algum das nossas proteinas tem um id dos que estão na lista de interesse
                 with open('poss'+str(j)+'.fasta','w') as save_file:
                     qual=ft.qualifiers
@@ -52,9 +52,9 @@ def poss():
                         
 def search_interesse():
     '''função do blast das proteinas possiveis de interesse contra humano e e.coli'''
-    lista=proteinas_interesse()
+    interesting_list=proteinas_interesse()
     j=1
-    for i in lista:
+    for prot in interesting_list:
         open('poss'+str(j)+'.fasta')
         record=SeqIO.read('poss'+str(j)+'.fasta','fasta')
         result_handle = NCBIWWW.qblast('blastp','swissprot',record.format('fasta'),hitlist_size=1, entrez_query='Homo sapiens[organism]'and'Escherichia coli[organism]')
@@ -66,48 +66,48 @@ def search_interesse():
 
 def determinar_interesse():
     '''determinação do interesse da proteina, se a identidade do unico hit que foi obtido for menos que 20, é considerado uma proteina de interesse'''
-    interessantes=[]
-    lista=proteinas_interesse()
-    for i in range(len(lista)):
-        result = open('possib'+str(i+1)+'.xml')
+    interesting_list=[]
+    list=proteinas_interesse()
+    for prot in range(len(list)):
+        result = open('possib'+str(prot+1)+'.xml')
         blast_record = NCBIXML.parse(result)
         item=next(blast_record)
         for ali in item.alignments:
             for hsp in ali.hsps:
                 if hsp.identities < 20:
-                    interessantes.append(i)
-    return interessantes
+                    interessantes.append(prot)
+    return interesting_list
 
 def separar_int():
     '''construção de uma lista de proteinas de interesse'''
     num_int=determinar_interesse()
-    lista_int=proteinas_interesse()
-    interessantes=[]
+    list_int=proteinas_interesse()
+    interesting_list=[]
     for i in num_int:
-        a=lista_int[i]
-        interessantes.append(a)
-    return interessantes
+        a=list_int[i]
+        interesting_list.append(a)
+    return interesting_list
     
 def separar_n_int():
     '''construção de uma lista com as restantes proteinas'''
-    interessantes=separar_int()
-    lista=lista=select_features()
+    interesting_list=separar_int()
+    features=select_features()
     n_int=[]
-    for ft in lista:
+    for ft in features:
         qual=ft.qualifiers
         if 'protein_id' in qual.keys():                        
-            if qual['protein_id'][0] not in interessantes:
+            if qual['protein_id'][0] not in interesting_list:
                 n_int.append(qual['protein_id'][0])
     return n_int
 
 def fasta_files():
     '''função que cria os fastas divisorios entre interessantes e outras'''
-    interesse=separar_int()
-    lista=select_features()
-    for ft in lista:
+    interesting_list=separar_int()
+    features=select_features()
+    for ft in features:
         qual=ft.qualifiers
         if 'protein_id' in qual.keys():                        
-            if qual['protein_id'][0] in interesse:
+            if qual['protein_id'][0] in interesting_list:
             #ver se algum das nossas proteinas tem um id dos que estão na lista de interesse
                 with open('int'+qual['protein_id'][0]+'.fasta','w') as save_file:
                     qual=ft.qualifiers
@@ -123,12 +123,12 @@ def fasta_files():
 
 def blast():
     '''blast para todas as proteinas'''
-    interesse=separar_int()
-    lista=select_features()    
-    for ft in lista:
+    interesting_list=separar_int()
+    features=select_features()    
+    for ft in features:
         qual=ft.qualifiers
         if 'protein_id' in qual.keys():                        
-            if qual['protein_id'][0] in interesse:
+            if qual['protein_id'][0] in interesting_list:
                 open('int'+qual['protein_id'][0]+'.fasta')
                 record=SeqIO.read('int'+qual['protein_id'][0]+'.fasta','fasta')
                 result_handle = NCBIWWW.qblast('blastp','swissprot',record.format('fasta'), hitlist_size=10)
@@ -145,12 +145,3 @@ def blast():
                 save_file.close()
                 result_handle.close()
 
-def Kegg_file():
-    '''ficheiro fasta necessário para o kegg'''
-    lista=select_features()
-    with open('kegg_file.fasta','w') as save_file:
-        for ft in lista:
-            qual=ft.qualifiers
-            if 'protein_id' in qual.keys():
-                save_file.write('>'+qual['protein_id'][0]+'\n')                
-                save_file.write(qual['translation'][0]+'\n')

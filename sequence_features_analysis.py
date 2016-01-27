@@ -1,10 +1,16 @@
-#Retrieve information from GenBank
-handler = Entrez.efetch(db="nucleotide", rettype="gbwithparts", retmode="text", id="NC_000919")
-seq_record_genbank = SeqIO.read(handler, "gb") #using "gb" as an alias for "genbank"
-handler.close()
+#counts number of features of CDS and tRNA type
+def distinguish_feature_type():
+    trna = 0
+    protein = 0
+    for ft in features:
+        if ft.type=='CDS':
+            protein += 1
+        elif ft.type == 'tRNA':
+            trna += 1
+    return (protein,trna)
 
-#Select features by specific locus_tag
-def select_features(first_tag,last_tag,interval):
+#Selects features with specific locus_tag
+def select_features():
     f = seq_record_genbank.features
     features = list()
     for i in range(2345,2951, 5):
@@ -15,8 +21,8 @@ def select_features(first_tag,last_tag,interval):
     return features
     
 #Saves tabular register
-def readtabular(filename):
-    handler = open(filename) #Opens tabular file
+def readtabular():
+    handler = open('tabular.txt') #Opens tabular file
     tabular = list() #Where tabular register is saved
     titles = handler.readline().lstrip('#').rstrip('\n').split('\t') #headlines
     for line in handler.readlines():
@@ -28,9 +34,9 @@ def readtabular(filename):
                     register[titles[k]] = objects[k]
                 tabular.append(register)
     return tabular
-    
-#Compare tabular with genbank register
-def validate_tb_gb(tabular,features):
+
+#compares information in genbank with information in tabular    
+def validate_tb_gb():
     irregularities = 0
     irregular_list = list()
     for ft in features:

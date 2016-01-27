@@ -1,3 +1,10 @@
+from bibiographic_analysis import *
+from sequence_features_analysis import *
+from proteins_table import *
+from protein_properties_analysis import *
+from kegg import *
+from multiple_align import *
+
 def main():
     #RETRIEVING DATA
     handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291")

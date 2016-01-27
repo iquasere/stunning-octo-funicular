@@ -56,7 +56,9 @@ def main():
 'WP_010882011.1':'<a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?ascbin=8&maxaln=10&seltype=2&uid=COG1480">CDD Link</a>',\
 'WP_010882021.1':'<a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?ascbin=8&maxaln=10&seltype=2&uid=cl20779">CDD Link</a>',\
 'WP_010882033.1':'No conserved domains'}
-    
+    tabela()
+    make_kegg()
+    read_all_kegg()
 
 if __name__ == '__main__':
     main()

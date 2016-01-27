@@ -107,11 +107,3 @@ def export(): #abre uma janela com a arvore filogenetica resultante e ser possiv
             pylab.show()
     except:
         print("Vizualizing Tree error!")
-
-if __name__ == '__main__':
-    #create_muscle()
-    readmulti_seq_id_dbxrefs()
-    #muscle2phy()
-    #create_phy()
-    #tree()
-    #export()

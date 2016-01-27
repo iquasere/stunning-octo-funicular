@@ -59,6 +59,16 @@ def main():
     tabela()
     make_kegg()
     read_all_kegg()
+    #fastas and blasts
+    retrieving_info_blast()
+    proteinas_interesse()
+    poss()
+    search_interesse()
+    determinar_interesse()
+    separar_int()
+    separar_n_int()
+    fasta_files()
+    blast()
 
 if __name__ == '__main__':
     main()

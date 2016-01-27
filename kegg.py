@@ -1,22 +1,25 @@
 #Makes list of all EC present in swissprot register
-def make_ec_list(swiss):
+def make_ec_list():
     ec_list = []
-    for sse in swiss:
-        found = re.search('EC=(.+?) {', sse.description)
+    for ss in sse:
+        found = re.search('EC=(.+?) {', ss.description)
         if found != None:
             ec_list.append(found.group(1))
     return ec_list
     
 #Requests enzyme register from KEGG
-def make_kegg(ec_list):
-    from Bio.KEGG import REST
+def make_kegg():
+    present = 0
+    ec_list = make_ec_list()
     for ec in ec_list:
         try:
             request = REST.kegg_get(ec)
             open("ec_"+ec+".txt", 'wb').write(request.read())
+            present += 1
         except:
             print('kegg request failed')
-            
+    return present
+ 
 #Reads a file and returns list of lines
 def read_kegg(ec):
     linhas = list()
@@ -25,11 +28,12 @@ def read_kegg(ec):
     for linha in temp:
         linhas.append(linha.rstrip('\n'))
     return linhas
-    
+
 #Creates table with information from KEGG    
-def read_all_kegg(ec_list):
+def read_all_kegg():
+    ec_list = make_ec_list()
     with open('kegg_table.txt','w') as kt:
-        kt.write('<!DOCTYPE html><html><body><table style="width:100%"><tr>')
+        kt.write('<table style="width:100%"><tr>')
         heads = ['NCBI id','KEGG id', 'EC number','KEGG Orthology', 'KEGG reaction ID','KEGG pathway']
         linha = str()    
         for head in heads:
@@ -104,5 +108,5 @@ def read_all_kegg(ec_list):
                     linha += '<td>'+sixth+'</td>'               #KEGG pathways
                     linha += '</tr>'
                     kt.write(linha)
-        kt.write('</tr></table></body></html>')
+        kt.write('</tr></table>')
         kt.close()

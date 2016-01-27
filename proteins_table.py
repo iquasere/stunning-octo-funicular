@@ -7,10 +7,11 @@ def tabela():
             linha += '<th>'+cabeça+'</th>'
         f_nt.write(linha)
         for ft in features:
-            linha = str()
-            linha += '<tr>'
+            linha = '<tr>'
             if ft.type == 'CDS':                                                                      #exclude gene and tRNA entries
                 if 'protein_id' in ft.qualifiers.keys():                                              #three hypotetical proteins lack protein id
+                    if ft.qualifiers['protein_id'][0] in interesting_list:
+                        linha = '<tr bgcolor="#00e5e6">'
                     for entry in sse:
                         for ref in entry.cross_references:
                             if ref[0] == 'RefSeq':
@@ -79,7 +80,7 @@ def tabela():
                     linha += '<td>'+str(fifth)+'</td>'                          #strand
                     linha += '<td>'+sixth+'</td>'                               #UniProt ID         
                     linha += '<td>'+seventh+'</td>'                             #Revision
-                    linha += '<td>'+eighth+'</td>'                              #Protein NCBI accession
+                    linha += "<td><a href='blastsite_"+eighth+".html'>"+eighth+"</a></td>"       #Protein NCBI accession
                     linha += '<td>'+ninth+'</td>'                               #Protein name
                     linha += '<td>'+str(tenth)+'</td>'                          #Sequence length
                     linha += '<td>'+eleventh+'</td>'                            #cellular location
